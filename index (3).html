@@ -45,14 +45,17 @@
       max-width: 720px;
       margin: 0 auto;
       padding: 48px 20px 64px;
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeInUp 0.8s ease forwards;
+      opacity: 1;
+      transform: none;
+      animation: fadeInUp 0.8s ease;
       position: relative;
       z-index: 2;
     }
 
-    @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: none; }
+    }
 
     .hero {
       text-align: center;
@@ -239,17 +242,21 @@
       --bg: #eef2f8; --card: #ffffff; --text: #1f2937; --muted: #64748b;
       --accent: #3b82f6; --accent-soft: rgba(59,130,246,0.12);
       --border: rgba(15,23,42,0.10); --accent-glow: rgba(59,130,246,0.35);
+      --text-main: var(--text);
+      --text-muted: var(--muted);
+      --card-border: var(--border);
+      --glow: var(--accent-glow);
     }
     .mf-hidden { display: none !important; }
 
-    .mf-toast { position: fixed; left: 50%; bottom: 30px; transform: translate(-50%, 16px); z-index: 1400; background: var(--card); color: var(--text); border: 1px solid var(--border); padding: 9px 18px; border-radius: 999px; font-size: 13px; box-shadow: 0 8px 24px rgba(0,0,0,0.3); opacity: 0; pointer-events: none; transition: opacity .25s ease, transform .25s ease; }
+    .mf-toast { position: fixed; left: 50%; bottom: 30px; transform: translate(-50%, 16px); z-index: 2100; background: var(--card); color: var(--text); border: 1px solid var(--border); padding: 9px 18px; border-radius: 999px; font-size: 13px; box-shadow: 0 8px 24px rgba(0,0,0,0.3); opacity: 0; pointer-events: none; transition: opacity .25s ease, transform .25s ease; }
     .mf-toast.show { opacity: 1; transform: translate(-50%, 0); }
 
     #mfCanvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.9; }
     #mfCursor { position: fixed; top: 0; left: 0; width: 340px; height: 340px; margin: -170px 0 0 -170px; border-radius: 50%; pointer-events: none; z-index: 1; background: radial-gradient(circle, rgba(96,165,250,0.14), rgba(167,139,250,0.06) 40%, transparent 70%); mix-blend-mode: screen; opacity: 0; transition: opacity 0.4s; will-change: transform; }
     html[data-mf-theme="light"] #mfCursor { mix-blend-mode: multiply; background: radial-gradient(circle, rgba(59,130,246,0.10), transparent 68%); }
 
-    #mfPalette { position: fixed; inset: 0; background: rgba(3,6,14,0.6); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); display: none; align-items: flex-start; justify-content: center; padding-top: 14vh; z-index: 400; opacity: 0; transition: opacity 0.18s; }
+    #mfPalette { position: fixed; inset: 0; background: rgba(3,6,14,0.6); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); display: none; align-items: flex-start; justify-content: center; padding-top: 14vh; z-index: 2000; opacity: 0; transition: opacity 0.18s; }
     #mfPalette.show { display: flex; opacity: 1; }
     .mf-pal-box { width: min(560px, 92vw); background: rgba(17,24,39,0.96); border: 1px solid rgba(96,165,250,0.25); border-radius: 16px; box-shadow: 0 24px 80px -20px rgba(0,0,0,0.7); overflow: hidden; transform: translateY(-8px) scale(0.98); transition: transform 0.18s; color: #e5e7eb; }
     #mfPalette.show .mf-pal-box { transform: translateY(0) scale(1); }
@@ -283,7 +290,7 @@
     .mf-tl-title { font-size: 15px; font-weight: 600; margin: 2px 0; }
     .mf-tl-desc { font-size: 13px; color: var(--muted); }
 
-    .mf-heat { display: grid; grid-template-columns: repeat(21,1fr); gap: 4px; margin-top: 8px; }
+    .mf-heat { display: grid; grid-auto-flow: column; grid-template-rows: repeat(7, 1fr); grid-auto-columns: 1fr; gap: 4px; margin-top: 8px; }
     .mf-heat i { aspect-ratio: 1/1; border-radius: 3px; background: rgba(255,255,255,0.06); transition: transform .2s; }
     .mf-heat i:hover { transform: scale(1.5); }
     .mf-heat i.l1 { background: rgba(96,165,250,0.25); }
@@ -321,7 +328,7 @@
     .mf-friend-ava { width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 15px; background: linear-gradient(135deg,#3b82f6,#a78bfa); }
     .mf-friend-name { font-size: 13px; font-weight: 600; }
     .mf-friend-desc { font-size: 11px; color: var(--muted); }
-    @media (max-width: 480px) { .mf-friends { grid-template-columns: 1fr; } .mf-heat { grid-template-columns: repeat(14,1fr); } }
+    @media (max-width: 480px) { .mf-friends { grid-template-columns: 1fr; } .mf-heat { grid-template-rows: repeat(7,1fr); } }
 
     .mf-contact-sub { font-size: .82rem; color: var(--text-muted); margin: -4px 0 12px; }
     .mf-contact-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
@@ -893,8 +900,6 @@
       </div>
     </section>
 
-    <div class="mf-toast" id="mfToast"></div>
-
     <footer class="footer">
       &copy; 2026 <span>默语</span> · 飞萤扑火，向死而生
       <br />
@@ -1159,6 +1164,12 @@
         }
       }
 
+      function playAt(i, autoplay) {
+        if (!playlist.length) return;
+        currentTrack = ((i % playlist.length) + playlist.length) % playlist.length;
+        loadTrack(autoplay !== false);
+      }
+
       audio.addEventListener('play', function() {
         if (playBtn) playBtn.innerHTML = '\u23F8';
         if (playerCover) playerCover.classList.add('playing');
@@ -1182,6 +1193,42 @@
       });
 
       if (playBtn) playBtn.addEventListener('click', togglePlay);
+
+      if (prevBtn) prevBtn.addEventListener('click', function () {
+        if (playlist.length <= 1) {
+          audio.currentTime = 0;
+          if (audio.paused) togglePlay();
+          return;
+        }
+        playAt(currentTrack - 1);
+      });
+
+      if (nextBtn) nextBtn.addEventListener('click', function () {
+        if (playlist.length <= 1) {
+          audio.currentTime = 0;
+          if (audio.paused) togglePlay();
+          return;
+        }
+        playAt(currentTrack + 1);
+      });
+
+      audio.addEventListener('ended', function () {
+        if (isRepeat) return; // audio.loop 已处理
+        if (playlist.length <= 1) {
+          audio.currentTime = 0;
+          var p0 = audio.play();
+          if (p0 && p0.catch) p0.catch(function () {});
+          return;
+        }
+        if (isShuffle) {
+          var n = currentTrack;
+          while (n === currentTrack) n = Math.floor(Math.random() * playlist.length);
+          playAt(n);
+        } else {
+          playAt(currentTrack + 1);
+        }
+      });
+
       if (shuffleBtn) shuffleBtn.addEventListener('click', function() {
         isShuffle = !isShuffle;
         shuffleBtn.classList.toggle('active', isShuffle);
@@ -1244,7 +1291,11 @@
           else if (h < 18) g = '下午好，来杯咖啡提提神';
           else if (h < 23) g = '晚上好，今天辛苦了';
           else g = '夜深了，早点休息';
-          greetEl.textContent = g;
+
+          // 文本相同或正在打字时不要覆盖
+          if (greetEl.textContent !== g && !greetEl.querySelector('.type-caret')) {
+            greetEl.textContent = g;
+          }
         }
       }
       tick();
@@ -1293,7 +1344,9 @@
       var quote = document.getElementById('timerQuote');
       var wrap = document.getElementById('timerWrap');
       if (!disp || !toggle) return;
+
       var sec = 0, running = false, iv = null;
+      var startTs = 0, baseSec = 0, savedMin = 0;
       var quotes = [
         '摸鱼一分钟，快乐六十秒。',
         '今天的快乐，是偷来的。',
@@ -1301,30 +1354,63 @@
         '进度条不动，心情很放松。',
         '老板不在，效率拉满（地）。'
       ];
+
       function fmt(n) { return (n < 10 ? '0' : '') + n; }
+
       function render() {
         var h = Math.floor(sec / 3600), m = Math.floor((sec % 3600) / 60), s = sec % 60;
         disp.textContent = fmt(h) + ':' + fmt(m) + ':' + fmt(s);
       }
+
+      function saveSlack() {
+        var mins = Math.floor(sec / 60);
+        if (mins <= savedMin) return;
+        var delta = mins - savedMin;
+        savedMin = mins;
+        try {
+          var base = parseInt(localStorage.getItem('mf-slack-min') || '0', 10) || 0;
+          base += delta;
+          localStorage.setItem('mf-slack-min', String(base));
+          var el = document.getElementById('mfStatSlack');
+          if (el) el.textContent = base;
+        } catch (e) {}
+      }
+
+      function loop() {
+        sec = baseSec + Math.floor((Date.now() - startTs) / 1000);
+        render();
+        saveSlack();
+      }
+
       toggle.addEventListener('click', function() {
         running = !running;
         if (running) {
+          startTs = Date.now();
+          baseSec = sec;
           toggle.textContent = '暂停摸鱼';
           wrap.classList.add('timer-run');
           quote.textContent = quotes[Math.floor(Math.random() * quotes.length)];
-          iv = setInterval(function() { sec++; render(); }, 1000);
+          clearInterval(iv);
+          iv = setInterval(loop, 1000);
         } else {
           toggle.textContent = '继续摸鱼';
           wrap.classList.remove('timer-run');
-          clearInterval(iv);
+          clearInterval(iv); iv = null;
+          loop();
         }
       });
+
       reset.addEventListener('click', function() {
-        running = false; clearInterval(iv); sec = 0; render();
+        running = false;
+        clearInterval(iv); iv = null;
+        saveSlack();
+        sec = 0; baseSec = 0; savedMin = 0;
+        render();
         toggle.textContent = '开始摸鱼';
         wrap.classList.remove('timer-run');
         quote.textContent = '工作再忙，也要记得摸鱼放松一下。';
       });
+
       render();
     })();
 
@@ -1572,7 +1658,7 @@
         ev.stopPropagation();
         if (!ctx) return;
         var r = this.getBoundingClientRect();
-        openCtx(window.innerWidth - r.left - ctx.offsetWidth - 10, r.top - ctx.offsetHeight - 6);
+        openCtx(r.left - ctx.offsetWidth - 10, r.top - ctx.offsetHeight - 6);
       });
 
       if (!playerVisible) {
@@ -1862,11 +1948,15 @@
       if (list && input){
         function load(){ try { return JSON.parse(localStorage.getItem(KEY))||null; } catch(e){ return null; } }
         function save(arr){ try { localStorage.setItem(KEY, JSON.stringify(arr)); } catch(e){} }
-        var data = load() || [
-          {t:'完成 C 语言课后习题', done:false},
-          {t:'复习网络工程 第三章', done:true},
-          {t:'维护一下个人主页', done:false}
-        ];
+        var data = load();
+        if (!data || !Array.isArray(data)) {
+          data = [
+            {t:'完成 C 语言课后习题', done:false},
+            {t:'复习网络工程 第三章', done:true},
+            {t:'维护一下个人主页', done:false}
+          ];
+          save(data);
+        }
         function render(){
           list.innerHTML='';
           data.forEach(function(it, idx){
@@ -1909,13 +1999,28 @@
       var siteStart = new Date('2026-09-01T00:00:00');
       var days = Math.max(0, Math.floor((Date.now()-siteStart.getTime())/86400000));
       countUp(document.getElementById('mfStatDays'), days, 1200);
+
       var slackMin = 0; try { slackMin = parseInt(localStorage.getItem('mf-slack-min')||'0',10)||0; } catch(e){}
       countUp(document.getElementById('mfStatSlack'), slackMin, 1200);
-      var streak = 0; try { streak = parseInt(localStorage.getItem('mf-streak')||'0',10)||0; } catch(e){}
-      if (!streak) streak = 3;
+
+      var streak = 1;
+      try {
+        var todayStr = new Date().toDateString();
+        var last = localStorage.getItem('mf-last-visit');
+        var s = parseInt(localStorage.getItem('mf-streak') || '0', 10) || 0;
+        if (last !== todayStr) {
+          var y = new Date(Date.now() - 86400000).toDateString();
+          s = (last === y) ? s + 1 : 1;
+          localStorage.setItem('mf-streak', String(s));
+          localStorage.setItem('mf-last-visit', todayStr);
+        }
+        streak = s || 1;
+      } catch(e) {}
       countUp(document.getElementById('mfStatCup'), streak, 1200);
+
       statTodo();
     } catch(e){}
+
     function statTodo(){
       var done=0, total=0;
       try {
@@ -1925,20 +2030,6 @@
       var el=document.getElementById('mfStatTodo');
       if (el) el.textContent = done + '/' + total;
     }
-    try {
-      setInterval(function(){
-        var disp=document.getElementById('timerDisplay');
-        if (!disp) return;
-        var t=disp.textContent||'';
-        var m=t.match(/(\d+):(\d+):(\d+)/);
-        if (!m) return;
-        var secs = (+m[1])*3600 + (+m[2])*60 + (+m[3]);
-        var mins = Math.floor(secs/60);
-        var base=0; try { base=parseInt(localStorage.getItem('mf-slack-min')||'0',10)||0; } catch(e){}
-        var el=document.getElementById('mfStatSlack');
-        if (el && secs>0) el.textContent = base + mins;
-      }, 1000);
-    } catch(e){}
   })();
   </script>
 
@@ -2068,6 +2159,7 @@
       .then(function(d){ showWeather(d,cityName); })
       .catch(function(){
         wrap.classList.remove('loaded');
+        wrap.classList.add('open');          // 展开面板，让重试按钮可见
         cityEl.textContent='暂时无法获取天气数据';
         if (retry) retry.style.display='block';
       });
@@ -2175,7 +2267,9 @@
           +'<button class="mf-sticky-del" title="删除">&#x2715;</button>';
         note.querySelector('.mf-sticky-del').addEventListener('click',function(){
           var cur=loadNotes();
-          cur=cur.filter(function(x){ return x.d !== n.d; });
+          cur=cur.filter(function(x){
+            return (x.id || String(x.d)) !== (n.id || String(n.d));
+          });
           saveNotes(cur);
           render();
         });
@@ -2186,7 +2280,10 @@
       var v=input.value.trim();
       if(!v)return;
       var list=loadNotes();
-      list.unshift({t:v,c:selColor,d:Date.now()});
+      list.unshift({
+        id: Date.now() + '-' + Math.random().toString(36).slice(2, 8),
+        t: v, c: selColor, d: Date.now()
+      });
       saveNotes(list);
       input.value='';
       render();
